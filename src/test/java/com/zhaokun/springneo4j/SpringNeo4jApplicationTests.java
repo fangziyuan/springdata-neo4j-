@@ -24,7 +24,7 @@ public class SpringNeo4jApplicationTests {
     @Test
     public void query() {
 //        Optional<Person> byId = personDao.findById(1262L);
-        Optional<Person> byId = personDao.findById(1443L);
+        Optional<Person> byId = personDao.findById(0L);
         boolean present = byId.isPresent();
         log.info("result = " + present);
         if (present) {
