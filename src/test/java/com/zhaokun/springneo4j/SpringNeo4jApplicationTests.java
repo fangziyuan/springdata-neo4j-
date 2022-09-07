@@ -6,12 +6,13 @@ import com.zhaokun.springneo4j.entity.Person;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.neo4j.ogm.model.Result;
+import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -20,6 +21,9 @@ public class SpringNeo4jApplicationTests {
 
     @Autowired
     private PersonDao personDao;
+
+    @Autowired
+    private Session session;
 
     @Test
     public void query() {
@@ -64,6 +68,20 @@ public class SpringNeo4jApplicationTests {
         // MATCH (tom:Person) WHERE tom.name = 'Tom'
         //CREATE (rose:Person {name: 'rose'}),
         //(tom)-[:KNOWS {since: 2001}]->(rose)
+    }
+
+    /**
+     * 查询Emil 的朋友
+     */
+    @Test
+    public void testQueryKnows() {
+        String cypherSql = "MATCH (ee:Person)-[:KNOWS]-(friends)\n" +
+                "WHERE ee.name = 'Emil' RETURN ee, friends";
+        Result query = session.query(cypherSql, new HashMap<>());
+        ArrayList<String> labelNames = new ArrayList<>();
+        for (Map<String, Object> map : query.queryResults()) {
+            System.out.println(map);
+        }
     }
 
     @Test
