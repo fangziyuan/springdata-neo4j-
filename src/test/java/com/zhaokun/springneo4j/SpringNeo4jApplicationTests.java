@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Slf4j
@@ -639,6 +640,28 @@ public class SpringNeo4jApplicationTests {
          *       WITH TomH as a
          *       MATCH (a)-[:ACTED_IN]->(m)<-[:DIRECTED]-(d) RETURN a,m,d LIMIT 10;
          */
+    }
+
+    @Test
+    public void test6() {
+        String cypherSql = "MATCH (ee:Person)" +
+                "WHERE ee.name = {name} RETURN ee";
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "Emil");
+        Result result = getQuery(cypherSql, map);
+        for (Map<String, Object> res : result.queryResults()) {
+            System.out.println(res);
+        }
+    }
+
+    @Test
+    public void test7() {
+        Result o = personDao.queryByName("Emil");
+        System.out.println(o.queryResults().toString());
+    }
+
+    public Result getQuery(String sql, Map<String, Object> map) {
+        return session.query(sql, map);
     }
 
 
