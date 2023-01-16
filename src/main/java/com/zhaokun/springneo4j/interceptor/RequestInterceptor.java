@@ -3,9 +3,12 @@ package com.zhaokun.springneo4j.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.zhaokun.springneo4j.config.CmdbHttpServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
@@ -36,7 +39,7 @@ public class RequestInterceptor implements HandlerInterceptor {
 
 
         String queryString = request.toString();
-        log.info("请求参数：{}", queryString);
+        log.info("请求参数：{}", JSON.toJSONString(queryString));
 
 
         pushRequest2Body(request, handlerMethod);
@@ -53,9 +56,8 @@ public class RequestInterceptor implements HandlerInterceptor {
             if(request instanceof CmdbHttpServletRequestWrapper){
                 CmdbHttpServletRequestWrapper requestWrapper = (CmdbHttpServletRequestWrapper)request;
                 String body = new String(requestWrapper.getBody(), request.getCharacterEncoding());
-                log.info("请求参数：{}", JSONObject.toJSON(body));
                 String s = body.toLowerCase();
-                log.info("处理后的请求参数：{}", s);
+                log.info("处理后的请求参数：{}", StringEscapeUtils.unescapeJava(s));
                 byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
                 requestWrapper.setBody(bytes);
             }
