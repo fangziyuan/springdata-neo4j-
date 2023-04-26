@@ -16,6 +16,6 @@ public class ModelServiceImpl {
     private ModelDao modelDao;
 
     public Result queryModelInfo() {
-        return modelDao.queryModelInfo();
+        return modelDao.queryModelRelationInfo();
     }
 }

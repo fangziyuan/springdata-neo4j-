@@ -21,6 +21,6 @@ public class Model {
     private String modelId;
 
     @Relationship(type = "FIELDRELATION")
-    private List<String> relationShipId;
+    private List<String> relationId;
 
 }

@@ -4,6 +4,7 @@ import com.zhaokun.springneo4j.entity.Model;
 import com.zhaokun.springneo4j.entity.Movie;
 import org.neo4j.ogm.model.Result;
 import org.springframework.data.neo4j.annotation.Query;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +21,7 @@ public interface ModelDao extends CrudRepository<Model, Long> {
      * @return
      */
     @Query("match(m:Model)-[:FIELDRELATION]->(f) return m,f")
-    Result queryModelInfo();
+    Result queryModelRelationInfo();
 
     /**
      * 创建节点
@@ -54,4 +55,19 @@ public interface ModelDao extends CrudRepository<Model, Long> {
             "(model2:Model {modelId: {1}})" +
             "DELETE rel")
     Result deleteModelRelation(String model1, String model2);
+
+    /**
+     * 查询所有模型的关系信息
+     * @return
+     */
+    @Query("match (model:Model)-[:FIELDRELATION]-(f) return model,f")
+    Result queryModelHasRelationInfo();
+
+    /**
+     * 查询某个模型下所有的关系信息
+     * @param modelId
+     * @return
+     */
+    @Query("match (model:Model)-[:FIELDRELATION]-(f) where model.modelId = {0} return model,f")
+    Result queryModelHasRelationInfoByModelId(String modelId);
 }
