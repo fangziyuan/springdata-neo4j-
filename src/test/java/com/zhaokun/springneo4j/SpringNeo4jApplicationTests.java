@@ -1,6 +1,7 @@
 package com.zhaokun.springneo4j;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.zhaokun.springneo4j.dao.PersonDao;
 import com.zhaokun.springneo4j.entity.Person;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,8 @@ public class SpringNeo4jApplicationTests {
 
     @Test
     public void query() {
-//        Optional<Person> byId = personDao.findById(1262L);
-        Optional<Person> byId = personDao.findById(0L);
+        Optional<Person> byId = personDao.findById(1262L);
+//        Optional<Person> byId = personDao.findById(0L);
         boolean present = byId.isPresent();
         log.info("result = " + present);
         if (present) {
@@ -657,7 +658,7 @@ public class SpringNeo4jApplicationTests {
     @Test
     public void test7() {
         Result o = personDao.queryByName("Emil");
-        System.out.println(o.queryResults().toString());
+        System.out.println(JSONObject.toJSONString(o.queryResults()));
     }
 
     public Result getQuery(String sql, Map<String, Object> map) {
