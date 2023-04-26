@@ -38,8 +38,20 @@ public interface ModelDao extends CrudRepository<Model, Long> {
      * @param relationId
      * @return
      */
-    @Query("MATCH(model1:Model {modelId: {0}}})," +
-            "MATCH(model2:Model {modelId: {1}}})" +
+    @Query("MATCH(model1:Model {modelId: {0}})," +
+            "(model2:Model {modelId: {1}})" +
             "CREATE (model1)-[:FIELDRELATION {relationId: {2}}]->(model2)")
     Result createModelRelation(String modelId1, String modelId2, String relationId);
+
+
+    /**
+     * 模型删除关系
+     * @param model1 模型id
+     * @param model2 模型id
+     * @return
+     */
+    @Query("MATCH(model1:Model {modelId: {0}})-[rel:FIELDRELATION]-" +
+            "(model2:Model {modelId: {1}})" +
+            "DELETE rel")
+    Result deleteModelRelation(String model1, String model2);
 }
